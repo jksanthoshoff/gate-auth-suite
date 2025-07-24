@@ -2,41 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* AI Gate Authentication Design System - College Student Portal
+All colors MUST be HSL. Futuristic gate-opening theme with glowing effects.
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core AI Theme Colors */
+    --background: 220 27% 4%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Card & Surface Colors */
+    --card: 220 25% 8%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 220 25% 8%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - Cyan Gate Theme */
+    --primary: 190 95% 55%;
+    --primary-foreground: 220 27% 4%;
+    --primary-glow: 190 100% 70%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Deep Tech Blue */
+    --secondary: 220 25% 12%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted Elements */
+    --muted: 220 20% 15%;
+    --muted-foreground: 215 25% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent - Purple/Magenta */
+    --accent: 280 100% 65%;
+    --accent-foreground: 210 40% 98%;
+    --accent-glow: 280 100% 80%;
 
-    --destructive: 0 84.2% 60.2%;
+    /* Status Colors */
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
+    
+    --success: 140 70% 50%;
+    --warning: 45 100% 60%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* UI Elements */
+    --border: 220 20% 20%;
+    --input: 220 25% 12%;
+    --ring: 190 95% 55%;
 
-    --radius: 0.5rem;
+    /* Design System */
+    --radius: 0.75rem;
+    
+    /* Custom Gate Theme Variables */
+    --gate-gradient: linear-gradient(135deg, hsl(190 95% 55% / 0.2), hsl(280 100% 65% / 0.2));
+    --gate-glow: 0 0 40px hsl(var(--primary-glow) / 0.3);
+    --gate-shadow: 0 20px 40px hsl(220 27% 4% / 0.4);
+    --transition-gate: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
 
@@ -101,5 +122,91 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    background: linear-gradient(135deg, hsl(220 27% 4%), hsl(220 30% 6%));
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  /* Gate Animation Components */
+  .gate-container {
+    @apply relative overflow-hidden;
+  }
+  
+  .gate-left, .gate-right {
+    @apply absolute inset-y-0 w-1/2 bg-gradient-to-br from-card via-secondary to-card;
+    transition: var(--transition-gate);
+    border: 1px solid hsl(var(--border));
+  }
+  
+  .gate-left {
+    @apply left-0 border-r-0;
+    background: linear-gradient(135deg, hsl(var(--card)), hsl(var(--secondary)));
+  }
+  
+  .gate-right {
+    @apply right-0 border-l-0;
+    background: linear-gradient(225deg, hsl(var(--card)), hsl(var(--secondary)));
+  }
+  
+  .gate-opening .gate-left {
+    transform: translateX(-100%);
+  }
+  
+  .gate-opening .gate-right {
+    transform: translateX(100%);
+  }
+  
+  /* Glowing Effects */
+  .glow-border {
+    position: relative;
+    border: 1px solid hsl(var(--border));
+  }
+  
+  .glow-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(45deg, 
+      hsl(var(--primary) / 0.5), 
+      hsl(var(--accent) / 0.5), 
+      hsl(var(--primary) / 0.5)
+    );
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    transition: var(--transition-smooth);
+  }
+  
+  .glow-border:hover::before,
+  .glow-border:focus-within::before {
+    opacity: 1;
+    animation: pulse 2s infinite;
+  }
+  
+  /* Button Variants */
+  .btn-gate {
+    @apply bg-gradient-to-r from-primary via-primary to-accent text-primary-foreground;
+    @apply font-semibold py-3 px-6 rounded-lg;
+    @apply transition-all duration-300 ease-out;
+    @apply shadow-lg hover:shadow-xl;
+    box-shadow: var(--gate-glow);
+  }
+  
+  .btn-gate:hover {
+    @apply scale-105;
+    box-shadow: 0 0 60px hsl(var(--primary-glow) / 0.4);
+  }
+  
+  /* Input Enhancements */
+  .input-gate {
+    @apply bg-input border-border text-foreground;
+    @apply transition-all duration-300;
+    background: linear-gradient(135deg, hsl(var(--input)), hsl(var(--muted)));
+  }
+  
+  .input-gate:focus {
+    @apply ring-2 ring-primary;
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.2);
   }
 }
